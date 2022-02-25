@@ -1,8 +1,0 @@
-all:
-    children:
-        sun:
-            hosts:
-                sun_host:
-                    ansible_host: 157.230.41.84
-            vars:
-                ansible_user: root

@@ -1,7 +1,0 @@
-proj: sun
-host: 157.230.41.84
-work:
-    name: sun
-    location: /Users/junwu/develop/proj/sun
-    version: 0.0.1
-    update: true
