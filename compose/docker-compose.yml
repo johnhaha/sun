@@ -2,7 +2,7 @@ version: "3.9"
 services:
     sun:
         hostname: sun
-        image: johnhaha/sun:1.0.0
+        image: johnhaha/sun:0.0.2
         ports:
             - 8008:8008
         volumes:

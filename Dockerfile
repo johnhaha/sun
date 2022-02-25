@@ -1,5 +1,9 @@
 FROM golang:1.18rc1-alpine AS builder
 
+RUN apk update
+
+RUN apk add --no-cache git
+
 # Set necessary environmet variables needed for our image
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \

@@ -15,7 +15,7 @@ env:
     NOTIFY_DATA: sss
     PUSH: true
     REGISTRY: docker.io
-    TAG: 1.1.2
+    TAG: 0.0.2
 jobs:
     build:
         permissions:
