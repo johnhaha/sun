@@ -1,0 +1,32 @@
+- hosts: sun
+  vars:
+    - SCRIPT_PATH: /Users/junwu/develop/deploy/shoot/scripts
+    - DO_USER_NAME: johnhaha
+    - APP_PATH: /Users/junwu/develop/proj/sun/.pose/app
+    - SERVICE_PATH: /Users/junwu/develop/proj/sun/.pose/service
+    - DO_COMPOSE: /Users/junwu/develop/proj/sun/.pose/docker-compose
+    - WEB_PATH: /Users/junwu/develop/proj/sun/web
+    - NGINX_PATH: /Users/junwu/develop/proj/sun/.pose/nginx
+    - DO_PSW: do007deAK47
+    - WORK_NAME: sun
+    - WORK_PATH: /Users/junwu/develop/proj/sun/.pose/work
+    - DO_REGISTRY: docker.io
+  tasks:
+    - command: uname -a
+      name: uname task
+      register: ycoevf
+    - debug:
+        var: ycoevf.stdout_lines
+    - copy:
+        dest: /home/work/{{WORK_NAME}}/docker-compose.yaml
+        mode: u=rwx,g=rx,o=r
+        src: '{{WORK_PATH}}/docker-compose.yaml'
+      name: copy app compose to server
+      register: naknec
+    - debug:
+        var: naknec.stdout_lines
+    - command: chdir=/home/work/{{WORK_NAME}} docker-compose up --build -d
+      name: docker up work
+      register: latlak
+    - debug:
+        var: latlak.stdout_lines

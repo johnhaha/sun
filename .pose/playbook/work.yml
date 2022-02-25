@@ -1,0 +1,40 @@
+- hosts: sun
+  vars:
+    - WORK_PATH: /Users/junwu/develop/proj/sun/.pose/work
+    - DO_PSW: do007deAK47
+    - DO_COMPOSE: /Users/junwu/develop/proj/sun/.pose/docker-compose
+    - SERVICE_PATH: /Users/junwu/develop/proj/sun/.pose/service
+    - DO_USER_NAME: johnhaha
+    - WORK_NAME: sun
+    - APP_PATH: /Users/junwu/develop/proj/sun/.pose/app
+    - NGINX_PATH: /Users/junwu/develop/proj/sun/.pose/nginx
+    - SCRIPT_PATH: /Users/junwu/develop/deploy/shoot/scripts
+    - WEB_PATH: /Users/junwu/develop/proj/sun/web
+    - DO_REGISTRY: docker.io
+  tasks:
+    - command: uname -a
+      name: uname task
+      register: iulrbe
+    - debug:
+        var: iulrbe.stdout_lines
+    - file:
+        mode: "0775"
+        path: /home/work
+        state: directory
+      name: create work dir
+      register: nhumap
+    - debug:
+        var: nhumap.stdout_lines
+    - copy:
+        dest: /home/work/{{WORK_NAME}}
+        mode: u=rwx,g=rx,o=r
+        src: '{{WORK_PATH}}/'
+      name: copy work to server
+      register: mlvsfm
+    - debug:
+        var: mlvsfm.stdout_lines
+    - command: chdir=/home/work/{{WORK_NAME}} docker-compose up --build -d
+      name: docker up work
+      register: hbesjl
+    - debug:
+        var: hbesjl.stdout_lines

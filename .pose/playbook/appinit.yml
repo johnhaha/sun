@@ -1,0 +1,32 @@
+- hosts: sun
+  vars:
+    - NGINX_PATH: /Users/junwu/develop/proj/sun/.pose/nginx
+    - DO_PSW: do007deAK47
+    - SERVICE_PATH: /Users/junwu/develop/proj/sun/.pose/service
+    - DO_COMPOSE: /Users/junwu/develop/proj/sun/.pose/docker-compose
+    - DO_REGISTRY: docker.io
+    - APP_PATH: /Users/junwu/develop/proj/sun/.pose/app
+    - WORK_PATH: /Users/junwu/develop/proj/sun/.pose/work
+    - WEB_PATH: /Users/junwu/develop/proj/sun/web
+    - SCRIPT_PATH: /Users/junwu/develop/deploy/shoot/scripts
+    - DO_USER_NAME: johnhaha
+    - WORK_NAME: sun
+  tasks:
+    - command: uname -a
+      name: uname task
+      register: xjmaxd
+    - debug:
+        var: xjmaxd.stdout_lines
+    - copy:
+        dest: /home
+        mode: u=rwx,g=rx,o=r
+        src: '{{APP_PATH}}'
+      name: copy app to server
+      register: aimjrr
+    - debug:
+        var: aimjrr.stdout_lines
+    - command: chdir=/home/app docker-compose up --build -d
+      name: docker up app
+      register: oczsgk
+    - debug:
+        var: oczsgk.stdout_lines

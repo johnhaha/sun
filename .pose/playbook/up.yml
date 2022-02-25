@@ -1,0 +1,89 @@
+- hosts: sun
+  vars:
+    - WORK_PATH: /Users/junwu/develop/proj/sun/.pose/work
+    - NGINX_PATH: /Users/junwu/develop/proj/sun/.pose/nginx
+    - SERVICE_PATH: /Users/junwu/develop/proj/sun/.pose/service
+    - DO_REGISTRY: docker.io
+    - DO_PSW: do007deAK47
+    - SCRIPT_PATH: /Users/junwu/develop/deploy/shoot/scripts
+    - DO_USER_NAME: johnhaha
+    - DO_COMPOSE: /Users/junwu/develop/proj/sun/.pose/docker-compose
+    - WEB_PATH: /Users/junwu/develop/proj/sun/web
+    - WORK_NAME: sun
+    - APP_PATH: /Users/junwu/develop/proj/sun/.pose/app
+  tasks:
+    - copy:
+        dest: /home
+        mode: u=rwx,g=rx,o=r
+        src: '{{SCRIPT_PATH}}'
+      name: copy script to server
+      register: sxugzb
+    - debug:
+        var: sxugzb.stdout_lines
+    - copy:
+        dest: /home
+        mode: u=rwx,g=rx,o=r
+        src: '{{NGINX_PATH}}'
+      name: copy nginx to server
+      register: exgjol
+    - debug:
+        var: exgjol.stdout_lines
+    - copy:
+        dest: /home
+        mode: u=rwx,g=rx,o=r
+        src: '{{APP_PATH}}'
+      name: copy app to server
+      register: tnvzeo
+    - debug:
+        var: tnvzeo.stdout_lines
+    - copy:
+        dest: /home
+        mode: u=rwx,g=rx,o=r
+        src: '{{SERVICE_PATH}}'
+      name: copy service to server
+      register: loosia
+    - debug:
+        var: loosia.stdout_lines
+    - command: chdir=/home/scripts ./install.sh
+      name: run install task
+      register: hzheup
+    - debug:
+        var: hzheup.stdout_lines
+    - command: docker login {{DO_REGISTRY}} -u {{DO_USER_NAME}} -p {{DO_PSW}}
+      name: log into docker
+      register: xmizbz
+    - debug:
+        var: xmizbz.stdout_lines
+    - copy:
+        dest: /usr/local/bin/docker-compose
+        mode: u=rwx,g=rx,o=r
+        src: '{{DO_COMPOSE}}'
+      name: copy compose file to server
+      register: dfqmfg
+    - debug:
+        var: dfqmfg.stdout_lines
+    - command: chmod +x /usr/local/bin/docker-compose
+      name: chmod compose
+      register: pryjjo
+    - debug:
+        var: pryjjo.stdout_lines
+    - command: mv /home/nginx/nginx /etc/nginx/sites-enabled/default
+      name: config nginx
+      register: nphqor
+    - debug:
+        var: nphqor.stdout_lines
+    - command: chdir=/home/service docker-compose up --build -d
+      name: docker up service
+      register: tebobp
+    - debug:
+        var: tebobp.stdout_lines
+    - command: chdir=/home/app docker-compose up --build -d
+      name: docker up app
+      register: lmsddd
+    - debug:
+        var: lmsddd.stdout_lines
+    - command: chdir=/home/scripts ./config.sh
+      name: run config shell
+      register: artulh
+    - debug:
+        var: artulh.stdout_lines

@@ -1,0 +1,27 @@
+- hosts: sun
+  vars:
+    - APP_PATH: /Users/junwu/develop/proj/sun/.pose/app
+    - WORK_PATH: /Users/junwu/develop/proj/sun/.pose/work
+    - SERVICE_PATH: /Users/junwu/develop/proj/sun/.pose/service
+    - SCRIPT_PATH: /Users/junwu/develop/deploy/shoot/scripts
+    - WORK_NAME: sun
+    - DO_PSW: do007deAK47
+    - DO_COMPOSE: /Users/junwu/develop/proj/sun/.pose/docker-compose
+    - WEB_PATH: /Users/junwu/develop/proj/sun/web
+    - DO_REGISTRY: docker.io
+    - DO_USER_NAME: johnhaha
+    - NGINX_PATH: /Users/junwu/develop/proj/sun/.pose/nginx
+  tasks:
+    - command: uname -a
+      name: uname task
+      register: sesxzt
+    - debug:
+        var: sesxzt.stdout_lines
+    - copy:
+        dest: /home/work/{{WORK_NAME}}/{{WORK_NAME}}
+        mode: u=rwx,g=rx,o=r
+        src: '{{WEB_PATH}}'
+      name: copy web to server
+      register: omtcxz
+    - debug:
+        var: omtcxz.stdout_lines

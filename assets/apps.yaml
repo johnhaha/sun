@@ -1,0 +1,6 @@
+- name: 咕噜
+  avatar: "assets/logos/soba.jpg"
+  des: "一款模糊社交应用"
+- name: 奶牛网球
+  avatar: "assets/logos/cowtennis.png"
+  des: "网球约球小程序"

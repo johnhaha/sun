@@ -1,0 +1,56 @@
+name: Docker
+"on":
+    pull_request:
+        branches:
+            - main
+    push:
+        branches:
+            - main
+        tags:
+            - v*.*.*
+env:
+    BUILD: true
+    IMAGE_NAME: ${{ github.repository }}
+    MAIL_SUBJECT: Action run successfully!
+    NOTIFY_DATA: sss
+    PUSH: true
+    REGISTRY: docker.io
+    TAG: 1.1.2
+jobs:
+    build:
+        permissions:
+            contents: read
+            packages: write
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+            - if: github.event_name != 'pull_request'
+              name: Log into registry ${{ env.REGISTRY }}
+              uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+              with:
+                password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+                registry: ${{ env.REGISTRY }}
+                username: ${{ secrets.DOCKER_HUB_USERNAME }}
+            - id: meta
+              name: Extract Docker metadata
+              uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+              with:
+                images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            - name: Build and push Docker image
+              uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+              with:
+                context: .
+                labels: ${{ steps.meta.outputs.labels }}
+                push: ${{ github.event_name != 'pull_request' && env.PUSH}}
+                tags: ${{ github.repository }}:${{ env.TAG }}
+            - name: Wechat Work Robot Message
+              uses: fifsky/wechat-work-action@v0.0.1
+              with:
+                content: |
+                    ## ${{github.repository}} Build成功
+                    > repository: ${{ github.repository }}
+                    > committer: ${{ github.actor }}
+                    > job status: ${{ job.status }}
+                type: markdown
+                url: ${{ secrets.WEBHOOK_URL}}
